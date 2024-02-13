@@ -111,7 +111,7 @@ int main() {
     int** matrix1;
     int** matrix2;
     int** resultMatrix;
-    int N = 1000;
+    int N = 500;
 
     generateRandomMatrixToFile(N, N, "matrix1.txt"); 
     generateRandomMatrixToFile(N, N, "matrix2.txt"); 
