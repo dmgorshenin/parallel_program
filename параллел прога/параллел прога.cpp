@@ -127,7 +127,7 @@ int main() {
     int** resultMatrix;
     int N = 500;
 
-    //while (N <= 3000) {
+    while (N <= 3000) {
         generateRandomMatrixToFile(N, "matrix1.txt");
         generateRandomMatrixToFile(N, "matrix2.txt");
 
@@ -152,7 +152,7 @@ int main() {
         freeMatrix(size, matrix2);
         freeMatrix(size, resultMatrix);
 
-        /*auto duration_generation = duration_cast<milliseconds>(start_compute - start);
+        auto duration_generation = duration_cast<milliseconds>(start_compute - start);
         auto duration_computation = duration_cast<milliseconds>(stop_compute - start_compute);
         auto duration_total = duration_cast<milliseconds>(stop - start);
         long long task_size = static_cast<long long>(size) * static_cast<long long>(size) * static_cast<long long>(size);
@@ -163,7 +163,7 @@ int main() {
         cout << "Объем задачи: " << task_size << endl;
 
         writeResultsToFile(N, duration_generation.count(), duration_computation.count(), duration_total.count(), task_size, "results.txt");
-        N += 100;*/
-    /*}*/
+        N += 100;
+    }
     return 0;
 }
