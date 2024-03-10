@@ -27,8 +27,8 @@ private:
 
     void generateRandomMatrixToFile(int*** matrix, const string& filename) {
         srand(time(NULL));
-        for (size_t i = 0; i < size; ++i) {
-            for (size_t j = 0; j < size; ++j) {
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
                 (*matrix)[i][j] = rand() % 100;
             }
         }
@@ -39,7 +39,7 @@ private:
             exit(1);
         }
 
-        file << size << endl;
+        file << size << endl; 
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 file << (*matrix)[i][j] << " ";
@@ -88,6 +88,7 @@ public:
     }
 
     void multiplyMatrices() {
+        #pragma omp parallel for 
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 result_matrix[i][j] = 0;
@@ -155,10 +156,14 @@ void writeTaskSizeToFile(int size, long long task_size, const string& filename) 
 int main() {
     setlocale(LC_ALL, "Russian");
     int N = 500;
+    int num_threads = 16;
+    string file_stat = "stats8.txt";
 
-    while (N <= 3000) {
+
+    while (N <= 2200) {
+        
         long long task_size = static_cast<long long>(N) * static_cast<long long>(N) * static_cast<long long>(N);
-        writeTaskSizeToFile(N, task_size, "stats.txt");
+        writeTaskSizeToFile(N, task_size, file_stat);
         cout << "Размер матриц " << N << "x" << N << endl << "Объем задачи: " << task_size << endl;
 
         for (size_t i = 0; i < 10; ++i)
@@ -166,6 +171,9 @@ int main() {
             MultiplyMatrix matrix(N);
 
             matrix.generate_and_save_matrices();
+
+            omp_set_num_threads(num_threads);
+            cout << "Количество ядер: " << omp_get_num_threads()<< endl;
 
             cout << "Файлы с данными для матриц сгенерированы" << endl;
 
@@ -178,13 +186,11 @@ int main() {
             auto duration_computation = duration_cast<milliseconds>(stop_compute - start_compute);
 
             cout << "Время умножения матриц: " << duration_computation.count() << " мс" << endl;
-            writeTimeToFile(duration_computation.count(), "stats.txt");
+            writeTimeToFile(duration_computation.count(), file_stat);
         }
         N += 100;
     }
 
-    //std::cout << omp_get_max_threads()<<std::endl;
-    //std::cout << omp_get_thread_num();
-
     return 0;
 }
+
